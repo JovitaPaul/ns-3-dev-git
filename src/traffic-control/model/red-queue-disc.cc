@@ -238,9 +238,9 @@ void
 RedQueueDisc::SetAredAlpha(double alpha)
 {
     NS_LOG_FUNCTION(this << alpha);
-    m_alpha = alpha;
+    m_aRedAlpha = alpha;
 
-    if (m_alpha > 0.01)
+    if (m_aRedAlpha > 0.01)
     {
         NS_LOG_WARN("Alpha value is above the recommended bound!");
     }
@@ -250,16 +250,16 @@ double
 RedQueueDisc::GetAredAlpha()
 {
     NS_LOG_FUNCTION(this);
-    return m_alpha;
+    return m_aRedAlpha;
 }
 
 void
 RedQueueDisc::SetAredBeta(double beta)
 {
     NS_LOG_FUNCTION(this << beta);
-    m_beta = beta;
+    m_aRedBeta = beta;
 
-    if (m_beta < 0.83)
+    if (m_aRedBeta < 0.83)
     {
         NS_LOG_WARN("Beta value is below the recommended bound!");
     }
@@ -269,7 +269,7 @@ double
 RedQueueDisc::GetAredBeta()
 {
     NS_LOG_FUNCTION(this);
-    return m_beta;
+    return m_aRedBeta;
 }
 
 void
@@ -595,13 +595,13 @@ RedQueueDisc::UpdateMaxP(double newAve)
     if (newAve < m_minTh + m_part && m_curMaxP > m_bottom)
     {
         // we should increase the average queue size, so decrease m_curMaxP
-        m_curMaxP = m_curMaxP * m_beta;
+        m_curMaxP = m_curMaxP * m_aRedBeta;
         m_lastSet = now;
     }
     else if (newAve > m_maxTh - m_part && m_top > m_curMaxP)
     {
         // we should decrease the average queue size, so increase m_curMaxP
-        double alpha = m_alpha;
+        double alpha = m_aRedAlpha;
         if (alpha > 0.25 * m_curMaxP)
         {
             alpha = 0.25 * m_curMaxP;
@@ -660,7 +660,7 @@ RedQueueDisc::DropEarly(Ptr<QueueDiscItem> item, uint32_t qSize)
         }
     }
 
-    double u = m_uv->GetValue();
+    double R = m_uv->GetValue();
 
     if (m_cautious == 2)
     {
@@ -676,7 +676,7 @@ RedQueueDisc::DropEarly(Ptr<QueueDiscItem> item, uint32_t qSize)
 
         if (ratio < 1.0)
         {
-            u *= 1.0 / ratio;
+            R *= 1.0 / ratio;
         }
     }
 
