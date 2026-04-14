@@ -264,13 +264,13 @@ class RedQueueDisc : public QueueDisc
     Time m_interval;          //!< Time interval to update m_curMaxP
     double m_top;             //!< Upper bound for m_curMaxP in ARED
     double m_bottom;          //!< Lower bound for m_curMaxP in ARED
-    double m_alpha;           //!< Increment parameter for m_curMaxP in ARED
-    double m_beta;            //!< Decrement parameter for m_curMaxP in ARED
+    double m_aRedAlpha;           //!< Increment parameter for m_curMaxP in ARED
+    double m_aRedBeta;            //!< Decrement parameter for m_curMaxP in ARED
     Time m_rtt;               //!< Rtt to be considered while automatically setting m_bottom in ARED
     bool m_isFengAdaptive;    //!< True to enable Feng's Adaptive RED
     bool m_isNonlinear;       //!< True to enable Nonlinear RED
-    double m_b;               //!< Increment parameter for m_curMaxP in Feng's Adaptive RED
-    double m_a;               //!< Decrement parameter for m_curMaxP in Feng's Adaptive RED
+    double m_fengBeta;               //!< Increment parameter for m_curMaxP in Feng's Adaptive RED
+    double m_fengAlpha;               //!< Decrement parameter for m_curMaxP in Feng's Adaptive RED
     bool m_isNs1Compat;       //!< Ns-1 compatibility
     DataRate m_linkBandwidth; //!< Link bandwidth
     Time m_linkDelay;         //!< Link delay
@@ -284,7 +284,7 @@ class RedQueueDisc : public QueueDisc
     double m_vD;             //!< 2.0 * m_curMaxP - 1.0 - used in "gentle" mode
     double m_curMaxP;        //!< Current max_p
     Time m_lastSet;          //!< Last time m_curMaxP was updated
-    double m_vProb;          //!< Prob. of packet drop
+    double m_Pa;          //!< Prob. of packet drop
     uint32_t m_countBytes;   //!< Number of bytes since last drop
     uint32_t m_old;          //!< 0 when average queue first exceeds threshold
     uint32_t m_idle;         //!< 0/1 idle status
