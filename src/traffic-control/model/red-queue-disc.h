@@ -258,9 +258,9 @@ class RedQueueDisc : public QueueDisc
     bool m_isAdaptMaxP;     //!< True to adapt m_curMaxP
     double m_minTh;         //!< Minimum threshold for m_qAvg (bytes or packets)
     double m_maxTh;   //!< Maximum threshold for m_qAvg (bytes or packets), should be >= 2 * m_minTh
-    double m_qW;      //!< Queue weight given to cur queue size sample
+    double m_wQ;      //!< Queue weight given to cur queue size sample
     double m_lInterm; //!< The max probability of dropping a packet
-    Time m_targetDelay;       //!< Target average queuing delay in ARED
+    Time m_targetQueueDelay;       //!< Target average queuing delay in ARED
     Time m_interval;          //!< Time interval to update m_curMaxP
     double m_top;             //!< Upper bound for m_curMaxP in ARED
     double m_bottom;          //!< Lower bound for m_curMaxP in ARED
