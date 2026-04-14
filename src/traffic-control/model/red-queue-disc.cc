@@ -612,12 +612,12 @@ RedQueueDisc::UpdateMaxP(double newAvg)
 
 // Compute the average queue size
 double
-RedQueueDisc::Estimator(uint32_t nQueued, uint32_t m, double oldAvg, double qW)
+RedQueueDisc::Estimator(uint32_t nCurrent_queue_len, uint32_t m, double oldAvg, double qW)
 {
-    NS_LOG_FUNCTION(this << nCurrent_queue_len << m << qAvg << qW);
+    NS_LOG_FUNCTION(this << nCurrent_queue_len << m << oldAvg << qW);
 
     double newAvg = oldAvg * std::pow(1.0 - qW, m);
-    newAvg += qW * nQueued;
+    newAvg += qW * nCurrent_queue_len;
 
     Time now = Simulator::Now();
     if (m_isAdaptMaxP && now > m_lastSet + m_interval)
@@ -679,9 +679,9 @@ RedQueueDisc::DropEarly(Ptr<QueueDiscItem> item, uint32_t qSize)
         }
     }
 
-    if (u <= m_Pa)
+    if (R <= m_Pa)
     {
-        NS_LOG_LOGIC("u <= m_Pa; u " << u << "; m_Pa " << m_Pa);
+        NS_LOG_LOGIC("R <= m_Pa; R " << R << "; m_Pa " << m_Pa);
 
         // DROP or MARK
         m_count = 0;
@@ -758,9 +758,9 @@ RedQueueDisc::ModifyP(double Pd, uint32_t size)
         {
             Pd = 0.0;
         }
-        else if (count1 * p < 2.0)
+        else if (count1 * Pd < 2.0)
         {
-            Pd /= (2.0 - count1 * p);
+            Pd /= (2.0 - count1 * Pd);
         }
         else
         {
