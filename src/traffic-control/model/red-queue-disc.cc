@@ -124,7 +124,7 @@ RedQueueDisc::GetTypeId()
                           QueueSizeValue(QueueSize("25p")),
                           MakeQueueSizeAccessor(&QueueDisc::SetMaxSize, &QueueDisc::GetMaxSize),
                           MakeQueueSizeChecker())
-            .AddAttribute("QW",
+            .AddAttribute("WQ",
                           "Queue weight related to the exponential weighted moving average (EWMA)",
                           DoubleValue(0.002),
                           MakeDoubleAccessor(&RedQueueDisc::m_wQ),
@@ -513,7 +513,7 @@ RedQueueDisc::InitializeParams()
     /*
      * If m_wQ=0, set it to a reasonable value of 1-exp(-1/C)
      * This corresponds to choosing m_wQ to be of that value for
-     * which the packet time constant -1/ln(1-m)qW) per default RTT
+     * which the packet time constant -1/ln(1-m)Wq) per default RTT
      * of 100ms is an order of magnitude more than the link capacity, C.
      *
      * If m_wQ=-1, then the queue weight is set to be a function of
@@ -612,12 +612,12 @@ RedQueueDisc::UpdateMaxP(double newAvg)
 
 // Compute the average queue size
 double
-RedQueueDisc::Estimator(uint32_t nCurrent_queue_len, uint32_t m, double oldAvg, double qW)
+RedQueueDisc::Estimator(uint32_t nCurrent_queue_len, uint32_t m, double oldAvg, double wQ)
 {
-    NS_LOG_FUNCTION(this << nCurrent_queue_len << m << oldAvg << qW);
+    NS_LOG_FUNCTION(this << nCurrent_queue_len << m << oldAvg << wQ);
 
-    double newAvg = oldAvg * std::pow(1.0 - qW, m);
-    newAvg += qW * nCurrent_queue_len;
+    double newAvg = oldAvg * std::pow(1.0 - wQ, m);
+    newAvg += wQ * nCurrent_queue_len;
 
     Time now = Simulator::Now();
     if (m_isAdaptMaxP && now > m_lastSet + m_interval)
