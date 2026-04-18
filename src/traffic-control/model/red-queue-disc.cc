@@ -237,9 +237,9 @@ void
 RedQueueDisc::SetAredAlpha(double alpha)
 {
     NS_LOG_FUNCTION(this << alpha);
-    m_aRedAlpha = alpha;
+    m_aredAlpha = alpha;
 
-    if (m_aRedAlpha > 0.01)
+    if (m_aredAlpha > 0.01)
     {
         NS_LOG_WARN("Alpha value is above the recommended bound!");
     }
@@ -249,16 +249,16 @@ double
 RedQueueDisc::GetAredAlpha()
 {
     NS_LOG_FUNCTION(this);
-    return m_aRedAlpha;
+    return m_aredAlpha;
 }
 
 void
 RedQueueDisc::SetAredBeta(double beta)
 {
     NS_LOG_FUNCTION(this << beta);
-    m_aRedBeta = beta;
+    m_aredBeta = beta;
 
-    if (m_aRedBeta < 0.83)
+    if (m_aredBeta < 0.83)
     {
         NS_LOG_WARN("Beta value is below the recommended bound!");
     }
@@ -268,7 +268,7 @@ double
 RedQueueDisc::GetAredBeta()
 {
     NS_LOG_FUNCTION(this);
-    return m_aRedBeta;
+    return m_aredBeta;
 }
 
 void
