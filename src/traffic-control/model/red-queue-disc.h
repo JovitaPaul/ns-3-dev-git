@@ -212,13 +212,13 @@ class RedQueueDisc : public QueueDisc
     void InitializeParams() override;
     /**
      * @brief Compute the average queue size
-     * @param nQueued number of queued packets
+     * @param Current_queue_len number of queued packets
      * @param m simulated number of packets arrival during idle period
      * @param qAvg average queue size
      * @param wQ queue weight given to cur q size sample
      * @returns new average queue size
      */
-    double Estimator(uint32_t nQueued, uint32_t m, double qAvg, double wQ);
+    double Estimator(uint32_t Current_queue_len, uint32_t m, double qAvg, double wQ);
     /**
      * @brief Update m_curMaxP
      * @param newAve new average queue length
@@ -251,7 +251,7 @@ class RedQueueDisc : public QueueDisc
 
     // ** Variables supplied by user
     uint32_t m_meanPktSize; //!< Avg pkt size
-    uint32_t m_idlePktSize; //!< Avg pkt size used during idle times
+    uint32_t m_idleQPktSize; //!< Avg pkt size used during idle times
     bool m_isWait;          //!< True for waiting between dropped packets
     bool m_isGentle;        //!< True to increase dropping prob. slowly when m_qAvg exceeds m_maxTh
     bool m_isARED;          //!< True to enable Adaptive RED
@@ -262,11 +262,11 @@ class RedQueueDisc : public QueueDisc
     double m_lInterm; //!< The max probability of dropping a packet
     Time m_targetDelay;       //!< Target average queuing delay in ARED
     Time m_interval;          //!< Time interval to update m_curMaxP
-    double m_top;             //!< Upper bound for m_curMaxP in ARED
-    double m_bottom;          //!< Lower bound for m_curMaxP in ARED
-    double m_aRedAlpha;           //!< Increment parameter for m_curMaxP in ARED
-    double m_aRedBeta;            //!< Decrement parameter for m_curMaxP in ARED
-    Time m_rtt;               //!< Rtt to be considered while automatically setting m_bottom in ARED
+    double m_ubCurMaxP;             //!< Upper bound for m_curMaxP in ARED
+    double m_lbCurMaxP;       //!< Lower bound for m_curMaxP in ARED
+    double m_aredAlpha;           //!< Increment parameter for m_curMaxP in ARED
+    double m_aredBeta;            //!< Decrement parameter for m_curMaxP in ARED
+    Time m_rtt;               //!< Rtt to be considered while automatically setting m_lbCurMaxP in ARED
     bool m_isFengAdaptive;    //!< True to enable Feng's Adaptive RED
     bool m_isNonlinear;       //!< True to enable Nonlinear RED
     double m_fengBeta;               //!< Increment parameter for m_curMaxP in Feng's Adaptive RED
@@ -283,11 +283,11 @@ class RedQueueDisc : public QueueDisc
     double m_vC;             //!< (1.0 - m_curMaxP) / m_maxTh - used in "gentle" mode
     double m_vD;             //!< 2.0 * m_curMaxP - 1.0 - used in "gentle" mode
     double m_curMaxP;        //!< Current max_p
-    Time m_lastSet;          //!< Last time m_curMaxP was updated
+    Time m_lastSet_currMaxP_At;          //!< Last time m_curMaxP was updated
     double m_Pa;          //!< Prob. of packet drop
     uint32_t m_countBytes;   //!< Number of bytes since last drop
-    uint32_t m_old;          //!< 0 when average queue first exceeds threshold
-    uint32_t m_idle;         //!< 0/1 idle status
+    uint32_t m_aboveMinTh;          //!< 0 when average queue first exceeds threshold
+    uint32_t m_isIdle;         //!< 0/1 idle status
     double m_ptc;            //!< packet time constant in packets/second
     double m_qAvg;           //!< Average queue length
     uint32_t m_count;        //!< Number of packets since last random number generation
@@ -298,7 +298,7 @@ class RedQueueDisc : public QueueDisc
      * 2 experimental (see red-queue-disc.cc)
      * 3 use Idle packet size in the ptc
      */
-    uint32_t m_cautious;
+    uint32_t m_dropCautionMode;
     Time m_idleTime; //!< Start of current idle period
 
     Ptr<UniformRandomVariable> m_uv; //!< rng stream
