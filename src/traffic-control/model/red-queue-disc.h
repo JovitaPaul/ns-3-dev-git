@@ -215,10 +215,10 @@ class RedQueueDisc : public QueueDisc
      * @param nQueued number of queued packets
      * @param m simulated number of packets arrival during idle period
      * @param qAvg average queue size
-     * @param qW queue weight given to cur q size sample
+     * @param wQ queue weight given to cur q size sample
      * @returns new average queue size
      */
-    double Estimator(uint32_t nQueued, uint32_t m, double qAvg, double qW);
+    double Estimator(uint32_t nQueued, uint32_t m, double qAvg, double wQ);
     /**
      * @brief Update m_curMaxP
      * @param newAve new average queue length
@@ -258,7 +258,7 @@ class RedQueueDisc : public QueueDisc
     bool m_isAdaptMaxP;     //!< True to adapt m_curMaxP
     double m_minTh;         //!< Minimum threshold for m_qAvg (bytes or packets)
     double m_maxTh;   //!< Maximum threshold for m_qAvg (bytes or packets), should be >= 2 * m_minTh
-    double m_qW;      //!< Queue weight given to cur queue size sample
+    double m_wQ;      //!< Queue weight given to cur queue size sample
     double m_lInterm; //!< The max probability of dropping a packet
     Time m_targetDelay;       //!< Target average queuing delay in ARED
     Time m_interval;          //!< Time interval to update m_curMaxP
